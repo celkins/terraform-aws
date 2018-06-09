@@ -1,7 +1,9 @@
-language: python
-python:
-  - "2.7"
-install:
-  - pip install -r requirements.txt
+sudo: required
+env:
+  - tf_version=0.11.7
+language: bash
+before_install:
+  - wget https://releases.hashicorp.com/terraform/${tf_version}/terraform_${tf_version}_linux_amd64.zip -O /tmp/terraform.zip
+  - sudo unzip -d /usr/local/bin/ /tmp/terraform.zip
 script:
   - make

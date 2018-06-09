@@ -1,6 +1,12 @@
-.PHONY: all
-all: bootstrap.yaml
+modules = $(shell find . -type f -name '*.tf' -exec dirname {} \;|sort -u)
 
-.PHONY: bootstrap.yaml
-bootstrap.yaml:
-	@cfn-lint --template $@
+.PHONY: all
+all: fmt validate
+
+.PHONY: fmt
+fmt:
+	@for module in $(modules); do (terraform fmt -check=true "$$module") || exit 1 ; done
+
+.PHONY: validate
+validate:
+	@for module in $(modules); do (terraform validate "$$module") || exit 1 ; done
